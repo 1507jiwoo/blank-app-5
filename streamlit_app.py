@@ -2,36 +2,97 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# 샘플 데이터
-df = px.data.gapminder()
+st.set_page_config(page_title="해수면 상승 보고서", layout="wide")
 
-st.title("📊 인터랙티브 보고서")
+# 제목
+st.title("🌊🏫 내일은 물 위의 학교? : 해수면 상승의 경고")
+st.subheader("🛶 통학길에 카약 타는 날 올지도? : 해수면 SOS")
 
-# --- 사이드바 ---
-st.sidebar.header("🔧 그래프 선택")
-chart_type = st.sidebar.radio(
-    "보고서에 표시할 그래프를 선택하세요:",
-    ["GDP vs Life Expectancy", "Population by Continent", "GDP Growth Over Time"]
-)
+# ---------------- 서론 ----------------
+st.header("서론: 문제 제기")
+st.markdown("""
+최근 기후이상으로 인해 폭염 등 자연재해가 생기고 있습니다.  
+또한 지난 30년(1991년~2020년) 동안 우리나라 전 연안의 평균 해수면은 **매년 3.03mm**씩 늘어나 총 **9.1cm 상승**했습니다.  
+따라서 해수면 상승은 청소년 세대의 현재와 미래 모두를 위협하는 중요한 사회 문제로 떠오르고 있습니다.  
+""")
 
-# --- 본문 보고서 ---
-st.subheader("보고서 시각화")
+# ---------------- 본론 1 ----------------
+st.header("본론 1: 데이터가 말하는 해수면의 비밀")
 
-if chart_type == "GDP vs Life Expectancy":
-    fig = px.scatter(
-        df.query("year==2007"),
-        x="gdpPercap", y="lifeExp",
-        size="pop", color="continent",
-        hover_name="country", log_x=True
-    )
-    st.plotly_chart(fig, use_container_width=True)
+st.subheader("국제 데이터 분석")
+st.markdown("""
+1880년 이후 지구 평균 해수면은 꾸준히 상승해왔으며, 특히 1990년대 이후 그 속도가 빨라졌습니다.  
+이는 빙하 융해와 해수의 열팽창 때문으로, 바다가 뜨거워지고 있다는 사실을 수치로 확인할 수 있습니다.
+""")
 
-elif chart_type == "Population by Continent":
-    fig = px.bar(
-        df.query("year==2007"),
-        x="continent", y="pop", color="continent",
-        title="2007년 대륙별 인구"
-    )
-    st.plotly_chart(fig, use_container_width=True)
+# 가상 데이터 예시 (전 세계 해수면 변화)
+df_global = pd.DataFrame({
+    "연도": [1880, 1900, 1950, 2000, 2010, 2020],
+    "해수면(cm)": [0, 2, 6, 12, 18, 21]
+})
+fig1 = px.line(df_global, x="연도", y="해수면(cm)", title="1880~2020 전 세계 평균 해수면 변화")
+st.plotly_chart(fig1)
 
-elif chart_type == "GDP Growth Over Time":
+st.subheader("대한민국 해수면 변화 추이")
+st.markdown("""
+해양수산부에 따르면 지난 35년간 대한민국 연안 해수면은 **10.7cm 상승**했습니다.  
+이는 세계 평균보다 빠른 속도로, 우리 사회가 기후 변화의 영향을 직접 겪고 있음을 보여줍니다.
+""")
+
+# 한국 데이터 예시
+df_korea = pd.DataFrame({
+    "연도": [1990, 2000, 2010, 2020],
+    "해수면(cm)": [0, 3, 7, 10.7]
+})
+fig2 = px.line(df_korea, x="연도", y="해수면(cm)", title="1990~2020 대한민국 해수면 변화")
+st.plotly_chart(fig2)
+
+# ---------------- 본론 1-2 피해 사례 ----------------
+st.subheader("피해 통계와 사례 (청소년)")
+st.markdown("""
+환경재단 조사에 따르면 저소득층 어린이·청소년 76.3%가 기후위기로 인해 불안감을 느낀다고 응답했습니다.  
+
+- '매우 그렇다' 24.8%  
+- '그렇다' 51.5%  
+- '불안감 없음' 23.7%  
+""")
+
+df_survey = pd.DataFrame({
+    "응답": ["매우 그렇다", "그렇다", "불안감 없음"],
+    "비율": [24.8, 51.5, 23.7]
+})
+fig3 = px.pie(df_survey, names="응답", values="비율", title="청소년 기후 불안 응답 비율")
+st.plotly_chart(fig3)
+
+# 기사 4 삽입
+st.subheader("기사 4: 우리나라 해수면 상승 현황 (2021)")
+st.markdown("""
+우리나라 전 연안의 해수면은 1991년 이후 매년 3.03mm 상승하여, 최근 30년간 총 9.1cm 높아졌습니다.  
+이는 전 세계 평균과 유사하거나 그보다 높은 수치로, 연안 도시와 저지대 거주민들의 안전을 위협하고 있습니다.  
+""")
+
+# ---------------- 본론 2 ----------------
+st.header("본론 2: 차오르는 바다와 흔들리는 청소년의 미래")
+
+st.subheader("청소년 미래 직업과 기후위기 인식")
+df_jobs = pd.DataFrame({
+    "응답": ["매우 중요하다", "중요하다", "보통이다", "중요하지 않다"],
+    "비율": [40, 35, 20, 5]
+})
+fig4 = px.bar(df_jobs, x="응답", y="비율", title="청소년의 기후위기 인식 (미래 직업 관련)")
+st.plotly_chart(fig4)
+
+# 기사 3 삽입
+st.subheader("기사 3: 기후이상이 청년들에게 미치는 영향")
+st.markdown("""
+청년들은 기후위기로 인해 불안감과 우울감을 호소하고 있습니다.  
+특히 '내가 마지막 세대일 수 있다'는 절망감은 학업·진로·정신건강 전반에 부정적 영향을 주고 있습니다.  
+""")
+
+# ---------------- 결론 ----------------
+st.header("결론: 제언")
+st.markdown("""
+해수면 상승은 단순한 환경 문제가 아니라, 청소년의 **건강·심리·미래** 전반에 위협을 가합니다.  
+정부·교육기관·국제사회가 함께 협력하여 심리 지원, 기후 교육, 복지 안전망을 강화해야 합니다.  
+**오늘의 선택과 대응이 미래 세대의 삶을 결정짓습니다.**
+""")
